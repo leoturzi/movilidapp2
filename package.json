@@ -1,18 +1,22 @@
 {
-  "name": "movilidapp",
-  "version": "1.0.0",
-  "description": "App creada para seguimiento de equipos",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "movilidad",
-    "apoyo",
-    "terrestre",
-    "fuerza",
-    "aerea"
-  ],
-  "author": "Leonardo Turzi",
-  "license": "ISC"
+    "name": "movilidapp",
+    "version": "1.0.0",
+    "description": "App creada para seguimiento de equipos",
+    "main": "app.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "movilidad",
+        "apoyo",
+        "terrestre",
+        "fuerza",
+        "aerea"
+    ],
+    "author": "Leonardo Turzi",
+    "license": "ISC",
+    "dependencies": {
+        "firebase": "^9.16.0"
+    }
 }
