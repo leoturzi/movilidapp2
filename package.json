@@ -6,7 +6,8 @@
     "private": "true",
     "scripts": {
         "build": "webpack --progress --mode=production",
-        "watch": "webpack --progress --watch"
+        "watch": "webpack --progress --watch",
+        "deploy": "firebase deploy"
     },
     "keywords": [
         "movilidad",
