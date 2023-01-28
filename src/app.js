@@ -1,38 +1,62 @@
+import { useState } from 'react';
+import moment from 'moment-timezone';
+import cargarMovimiento from './firebase';
+
 function App() {
+    const [formData, setFormData] = useState({
+        workHours: '',
+        aircraft: '',
+        time: moment.tz('America/Argentina/Buenos_Aires').format('hh:mm'),
+    });
+
+    const handleChange = (event) => {
+        setFormData({
+            ...formData,
+            [event.target.name]: event.target.value,
+        });
+        console.log(formData);
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        cargarMovimiento(formData);
+        console.log('movimiento cargado');
+        // make API call or perform some action with the form data
+    };
+
     return (
-        <form id='cargar_movimiento'>
-            <label for='hora_trabajo_inicio'>
+        <form id='cargar_movimiento' onSubmit={handleSubmit}>
+            <label htmlFor='workHours'>
                 Horas de Trabajo Inicio
                 <input
                     type='text'
-                    name='hora_trabajo_inicio'
-                    id='hora_trabajo_inicio'
-                    value='12314'
+                    name='workHours'
+                    id='workHours'
+                    value={formData.workHours}
+                    onChange={handleChange}
                 />{' '}
             </label>
             <br />
-            <label for='aeronave_matricula'>
+            <label htmlFor='aircraft'>
                 Aeronave
                 <input
                     type='text'
-                    name='aeronave_matricula'
-                    id='aeronave_matricula'
-                    value='tc61'
+                    name='aircraft'
+                    id='aircraft'
+                    value={formData.aircraft}
+                    onChange={handleChange}
                 />{' '}
             </label>
             <br />
-            <label for='hora_entrega'>
+            <label htmlFor='time'>
                 Hora de Entrega
                 <input
                     type='time'
-                    name='hora_entrega'
-                    id='hora_entrega'
-                    value='12:00'
+                    name='time'
+                    id='time'
+                    value={formData.time}
+                    onChange={handleChange}
                 />
-            </label>
-            <br />
-            <label for='now'>
-                Ahora <input type='checkbox' name='now' id='now' />{' '}
             </label>
             <br />
             <button id='submit' type='submit'>
