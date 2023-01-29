@@ -1,68 +1,31 @@
-import { useState } from 'react';
-import moment from 'moment-timezone';
-import cargarMovimiento from './firebase';
+import React from 'react';
+import LoadForm from './components/loadForm/LoadForm';
+import Task from './components/task/Task';
+
+import { Routes, Route, HashRouter } from 'react-router-dom';
 
 function App() {
-    const [formData, setFormData] = useState({
-        workHours: '',
-        aircraft: '',
-        time: moment.tz('America/Argentina/Buenos_Aires').format('hh:mm'),
-    });
-
-    const handleChange = (event) => {
-        setFormData({
-            ...formData,
-            [event.target.name]: event.target.value,
-        });
-        console.log(formData);
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        cargarMovimiento(formData);
-        console.log('movimiento cargado');
-        // make API call or perform some action with the form data
-    };
-
     return (
-        <form id='cargar_movimiento' onSubmit={handleSubmit}>
-            <label htmlFor='workHours'>
-                Horas de Trabajo Inicio
-                <input
-                    type='text'
-                    name='workHours'
-                    id='workHours'
-                    value={formData.workHours}
-                    onChange={handleChange}
-                />{' '}
-            </label>
-            <br />
-            <label htmlFor='aircraft'>
-                Aeronave
-                <input
-                    type='text'
-                    name='aircraft'
-                    id='aircraft'
-                    value={formData.aircraft}
-                    onChange={handleChange}
-                />{' '}
-            </label>
-            <br />
-            <label htmlFor='time'>
-                Hora de Entrega
-                <input
-                    type='time'
-                    name='time'
-                    id='time'
-                    value={formData.time}
-                    onChange={handleChange}
+        <HashRouter>
+            <Routes>
+                <Route
+                    exact
+                    path='/equipo/:id/cargarMovimiento'
+                    element={<LoadForm type='movimiento' />}
                 />
-            </label>
-            <br />
-            <button id='submit' type='submit'>
-                Cargar
-            </button>
-        </form>
+                <Route
+                    exact
+                    path='/equipo/:id/cargarCombustible'
+                    element={<LoadForm type='combustible' />}
+                />
+                <Route
+                    exact
+                    path='/equipo/:id/movimientos'
+                    element={<LoadForm type='consulta' />}
+                />
+                <Route exact path='/equipo/:id' element={<Task />} />
+            </Routes>
+        </HashRouter>
     );
 }
 
