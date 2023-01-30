@@ -1,5 +1,16 @@
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, set, push } from 'firebase/database';
+import {
+    getDatabase,
+    ref,
+    set,
+    push,
+    get,
+    query,
+    limitToLast,
+    orderByChild,
+    equalTo,
+} from 'firebase/database';
+
 import moment from 'moment-timezone';
 
 const firebaseConfig = {
@@ -18,7 +29,7 @@ const app = initializeApp(firebaseConfig);
 // Initialize Realtime Database and get a reference to the service
 const db = getDatabase(app);
 
-export default function cargarMovimiento(formData) {
+export function cargarMovimiento(formData) {
     const movimientos = ref(db, 'Movimientos');
     try {
         const nuevoMovimiento = push(movimientos);
@@ -34,5 +45,29 @@ export default function cargarMovimiento(formData) {
         });
     } catch (error) {
         console.log(error.message);
+    }
+}
+
+export function updateMovimiento(formData) {}
+
+export async function getMovimientosEquipo(equipodId) {
+    const queryMovimientos = query(
+        ref(db, 'Movimientos'),
+        limitToLast(1),
+        orderByChild('equipo'),
+        equalTo(equipodId)
+    );
+
+    try {
+        const snapshot = await get(queryMovimientos);
+        if (snapshot.exists()) {
+            const id = Object.keys(snapshot.val());
+            const data = snapshot.val()[id];
+            return { data };
+        } else {
+            console.log('No data available');
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
