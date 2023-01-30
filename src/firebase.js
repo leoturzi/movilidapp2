@@ -1,15 +1,26 @@
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, set, push } from 'firebase/database';
+import {
+    getDatabase,
+    ref,
+    set,
+    push,
+    get,
+    query,
+    limitToLast,
+    orderByChild,
+    equalTo,
+} from 'firebase/database';
+
 import moment from 'moment-timezone';
 
 const firebaseConfig = {
-    apiKey: 'AIzaSyCMvxkc0UMVK4p7Ca7oTI7O4TaC2Sn3QbA',
-    authDomain: 'movilidapp-323720.firebaseapp.com',
-    databaseURL: 'https://movilidapp-323720-default-rtdb.firebaseio.com',
-    projectId: 'movilidapp-323720',
-    storageBucket: 'movilidapp-323720.appspot.com',
-    messagingSenderId: '541287069105',
-    appId: '1:541287069105:web:edd79fa9dc939dfd4e7990',
+    apiKey: 'AIzaSyDeCfv7Bl66VgRZFGohqpfcFwclvnCwhtg',
+    authDomain: 'movilidapp-33cef.firebaseapp.com',
+    databaseURL: 'https://movilidapp-33cef-default-rtdb.firebaseio.com',
+    projectId: 'movilidapp-33cef',
+    storageBucket: 'movilidapp-33cef.appspot.com',
+    messagingSenderId: '264423351773',
+    appId: '1:264423351773:web:519fce32d8fd87a87a8234',
 };
 
 // Initialize Firebase
@@ -18,16 +29,45 @@ const app = initializeApp(firebaseConfig);
 // Initialize Realtime Database and get a reference to the service
 const db = getDatabase(app);
 
-export default function cargarMovimiento(formData) {
+export function cargarMovimiento(formData) {
     const movimientos = ref(db, 'Movimientos');
-    const nuevoMovimiento = push(movimientos);
-    set(nuevoMovimiento, {
-        hsTrabajoInicio: formData.workHours,
-        aeronaveMatricula: formData.aircraft,
-        hsEntrega: formData.time,
-        movimientoCerrado: false,
-        createdAt: moment
-            .tz('America/Argentina/Buenos_Aires')
-            .format('YYYY-MM-DD h:mm:ss a'),
-    });
+    try {
+        const nuevoMovimiento = push(movimientos);
+        set(nuevoMovimiento, {
+            equipo: formData.unit,
+            hsTrabajoInicio: formData.workHours,
+            aeronaveMatricula: formData.aircraft,
+            hsEntrega: formData.time,
+            movimientoCerrado: false,
+            createdAt: moment
+                .tz('America/Argentina/Buenos_Aires')
+                .format('YYYY-MM-DD h:mm:ss a'),
+        });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+export function updateMovimiento(formData) {}
+
+export async function getMovimientosEquipo(equipodId) {
+    const queryMovimientos = query(
+        ref(db, 'Movimientos'),
+        limitToLast(1),
+        orderByChild('equipo'),
+        equalTo(equipodId)
+    );
+
+    try {
+        const snapshot = await get(queryMovimientos);
+        if (snapshot.exists()) {
+            const id = Object.keys(snapshot.val());
+            const data = snapshot.val()[id];
+            return { data };
+        } else {
+            console.log('No data available');
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
