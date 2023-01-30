@@ -1,17 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
-import cargarMovimiento from '../../firebase';
-import { useParams } from 'react-router-dom';
+import { cargarMovimiento, getMovimientosEquipo } from '../../firebase';
+import { useParams, useNavigate } from 'react-router-dom';
 
-function LoadForm({ match }) {
+function LoadForm() {
     const { id } = useParams();
+    const history = useNavigate();
 
+    const [loading, setLoading] = useState(true);
+    const [movimiento, setMovimiento] = useState(null);
     const [formData, setFormData] = useState({
         unit: id,
         workHours: '',
         aircraft: '',
         time: moment.tz('America/Argentina/Buenos_Aires').format('hh:mm'),
     });
+
+    useEffect(() => {
+        const fetchMovimientosData = async () => {
+            try {
+                const { data: lastMovimiento } = await getMovimientosEquipo(id);
+                setMovimiento(lastMovimiento);
+                setLoading(false);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchMovimientosData();
+    }, [formData]);
+
+    console.log(movimiento?.aeronaveMatricula);
 
     const handleChange = (event) => {
         setFormData({
@@ -24,7 +43,7 @@ function LoadForm({ match }) {
         event.preventDefault();
         cargarMovimiento(formData);
         clear();
-        // make API call or perform some action with the form data
+        history(`/equipo/${id}`);
     };
 
     const clear = () => {
@@ -34,10 +53,19 @@ function LoadForm({ match }) {
             aircraft: '',
             time: moment.tz('America/Argentina/Buenos_Aires').format('hh:mm'),
         });
+        setMovimiento(null);
     };
+
+    if (loading) {
+        return <h5>Cargando...</h5>;
+    }
 
     return (
         <form id='cargar_movimiento' onSubmit={handleSubmit}>
+            <h6>
+                Ultimo movimiento:{' '}
+                {`${movimiento.aeronaveMatricula} a las ${movimiento.hsEntrega}`}{' '}
+            </h6>
             <label htmlFor='workHours'>
                 Horas de Trabajo Inicio
                 <input
@@ -71,7 +99,7 @@ function LoadForm({ match }) {
                 />
             </label>
             <br />
-            <button id='submit' type='submit'>
+            <button id='submit' type='submit' disabled={loading}>
                 Cargar
             </button>
         </form>
