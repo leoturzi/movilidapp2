@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
-import { cargarMovimiento, getMovimientosEquipo } from '../../firebase';
+import {
+    cargarMovimiento,
+    getMovimientosEquipo,
+    updateMovimiento,
+} from '../../firebase';
 import { useParams, useNavigate } from 'react-router-dom';
 
 function LoadForm() {
-    const { id } = useParams();
+    const { id: equipoId } = useParams();
     const history = useNavigate();
 
     const [loading, setLoading] = useState(true);
     const [movimiento, setMovimiento] = useState(null);
     const [formData, setFormData] = useState({
-        unit: id,
+        unit: equipoId,
         workHours: '',
         aircraft: '',
         time: moment.tz('America/Argentina/Buenos_Aires').format('hh:mm'),
@@ -19,8 +23,10 @@ function LoadForm() {
     useEffect(() => {
         const fetchMovimientosData = async () => {
             try {
-                const { data: lastMovimiento } = await getMovimientosEquipo(id);
-                setMovimiento(lastMovimiento);
+                const { data: lastMovimiento, id: movimientoId } =
+                    await getMovimientosEquipo(equipoId);
+
+                setMovimiento({ movimientoId, ...lastMovimiento });
                 setLoading(false);
             } catch (error) {
                 console.error(error);
@@ -29,8 +35,6 @@ function LoadForm() {
 
         fetchMovimientosData();
     }, [formData]);
-
-    console.log(movimiento?.aeronaveMatricula);
 
     const handleChange = (event) => {
         setFormData({
@@ -41,14 +45,20 @@ function LoadForm() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        if (!movimiento.movimientoCerrado) {
+            updateMovimiento(formData, movimiento.movimientoId);
+            clear();
+            history(`/equipo/${equipoId}`);
+            return;
+        }
         cargarMovimiento(formData);
         clear();
-        history(`/equipo/${id}`);
+        history(`/equipo/${equipoId}`);
     };
 
     const clear = () => {
         setFormData({
-            unit: id,
+            unit: equipoId,
             workHours: '',
             aircraft: '',
             time: moment.tz('America/Argentina/Buenos_Aires').format('hh:mm'),
@@ -62,12 +72,14 @@ function LoadForm() {
 
     return (
         <form id='cargar_movimiento' onSubmit={handleSubmit}>
-            <h6>
+            <h2>{`Equipo ${equipoId}`}</h2>
+            <h3>
                 Ultimo movimiento:{' '}
-                {`${movimiento.aeronaveMatricula} a las ${movimiento.hsEntrega}`}{' '}
-            </h6>
+                {movimiento.movimientoCerrado ? 'Retiro ' : 'Colocacion '}
+                {`${movimiento.aeronaveMatricula} a las ${movimiento.createdAt}`}{' '}
+            </h3>
             <label htmlFor='workHours'>
-                Horas de Trabajo Inicio
+                Horas de Trabajo
                 <input
                     type='text'
                     name='workHours'
@@ -83,8 +95,13 @@ function LoadForm() {
                     type='text'
                     name='aircraft'
                     id='aircraft'
-                    value={formData.aircraft}
+                    value={
+                        !movimiento.movimientoCerrado
+                            ? movimiento.aeronaveMatricula
+                            : formData.aircraft
+                    }
                     onChange={handleChange}
+                    disabled={movimiento.movimientoCerrado}
                 />{' '}
             </label>
             <br />

@@ -3,6 +3,7 @@ import {
     getDatabase,
     ref,
     set,
+    update,
     push,
     get,
     query,
@@ -48,7 +49,17 @@ export function cargarMovimiento(formData) {
     }
 }
 
-export function updateMovimiento(formData) {}
+export function updateMovimiento(formData, movimientoId) {
+    const movimiento = ref(db, `Movimientos/${movimientoId}`);
+    update(movimiento, {
+        updatedAt: moment
+            .tz('America/Argentina/Buenos_Aires')
+            .format('YYYY-MM-DD h:mm:ss a'),
+        movimientoCerrado: true,
+        hsEntrega: formData.time,
+        hsTrabajoFin: formData.workHours,
+    });
+}
 
 export async function getMovimientosEquipo(equipodId) {
     const queryMovimientos = query(
@@ -61,9 +72,9 @@ export async function getMovimientosEquipo(equipodId) {
     try {
         const snapshot = await get(queryMovimientos);
         if (snapshot.exists()) {
-            const id = Object.keys(snapshot.val());
+            const id = Object.keys(snapshot.val())[0];
             const data = snapshot.val()[id];
-            return { data };
+            return { data, id };
         } else {
             console.log('No data available');
         }
