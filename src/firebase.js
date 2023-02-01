@@ -61,7 +61,25 @@ export function updateMovimiento(formData, movimientoId) {
     });
 }
 
-export async function getMovimientosEquipo(equipodId) {
+export async function getMovimientosEquipo(equipoId) {
+    const queryMovimientos = query(
+        ref(db, 'Movimientos'),
+        orderByChild('equipo'),
+        equalTo(equipoId)
+    );
+
+    try {
+        const snapshot = await get(queryMovimientos);
+        if (snapshot.exists()) {
+            return snapshot.val();
+        } else {
+            console.log('No data available');
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+export async function getLastMovimientoEquipo(equipodId) {
     const queryMovimientos = query(
         ref(db, 'Movimientos'),
         limitToLast(1),

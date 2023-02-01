@@ -1,5 +1,6 @@
 import React from 'react';
-import LoadForm from './components/loadForm/LoadForm';
+import FormCargaMovimiento from './components/equipo/form/FormCargaMovimiento';
+import Detail from './components/equipo/detail/Detail';
 import Task from './components/task/Task';
 
 import { Routes, Route, HashRouter } from 'react-router-dom';
@@ -11,17 +12,17 @@ function App() {
                 <Route
                     exact
                     path='/equipo/:id/cargarMovimiento'
-                    element={<LoadForm type='movimiento' />}
+                    element={<FormCargaMovimiento type='movimiento' />}
                 />
                 <Route
                     exact
                     path='/equipo/:id/cargarCombustible'
-                    element={<LoadForm type='combustible' />}
+                    element={<FormCargaMovimiento type='combustible' />}
                 />
                 <Route
                     exact
                     path='/equipo/:id/movimientos'
-                    element={<LoadForm type='consulta' />}
+                    element={<Detail />}
                 />
                 <Route exact path='/equipo/:id' element={<Task />} />
             </Routes>
