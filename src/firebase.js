@@ -61,20 +61,55 @@ export function updateMovimiento(formData, movimientoId) {
     });
 }
 
-export async function getMovimientosEquipo(equipodId) {
+export async function getMovimientosEquipo(equipoId) {
+    const queryMovimientos = query(
+        ref(db, 'Movimientos'),
+        orderByChild('equipo'),
+        equalTo(equipoId)
+    );
+
+    try {
+        const snapshot = await get(queryMovimientos);
+        if (snapshot.exists()) {
+            return snapshot.val();
+        } else {
+            console.log('No data available');
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+export async function getLastMovimientoEquipo(equipodId) {
     const queryMovimientos = query(
         ref(db, 'Movimientos'),
         limitToLast(1),
         orderByChild('equipo'),
         equalTo(equipodId)
     );
+    if (queryMovimientos) {
+        try {
+            const snapshot = await get(queryMovimientos);
+            if (snapshot.exists()) {
+                const id = Object.keys(snapshot.val())[0];
+                const data = snapshot.val()[id];
+                return { data, id };
+            } else {
+                console.log('No data available');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    return { data: 'no hay movimientos', id: 1 };
+}
+
+export async function getEquipos() {
+    const queryEquipos = query(ref(db, 'Equipos'));
 
     try {
-        const snapshot = await get(queryMovimientos);
+        const snapshot = await get(queryEquipos);
         if (snapshot.exists()) {
-            const id = Object.keys(snapshot.val())[0];
-            const data = snapshot.val()[id];
-            return { data, id };
+            return snapshot.val();
         } else {
             console.log('No data available');
         }

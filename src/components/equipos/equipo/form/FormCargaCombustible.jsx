@@ -4,7 +4,7 @@ import {
     cargarMovimiento,
     getMovimientosEquipo,
     updateMovimiento,
-} from '../../firebase';
+} from '../../../firebase';
 import { useParams, useNavigate } from 'react-router-dom';
 
 function LoadForm() {
@@ -34,6 +34,7 @@ function LoadForm() {
         };
 
         fetchMovimientosData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formData]);
 
     const handleChange = (event) => {
