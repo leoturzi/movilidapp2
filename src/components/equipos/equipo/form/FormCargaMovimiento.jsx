@@ -4,7 +4,7 @@ import {
     cargarMovimiento,
     getLastMovimientoEquipo,
     updateMovimiento,
-} from '../../../firebase';
+} from '../../../../firebase';
 import { useParams, useNavigate } from 'react-router-dom';
 
 function FormCargarMovimiento() {
@@ -102,7 +102,7 @@ function FormCargarMovimiento() {
                             : formData.aircraft
                     }
                     onChange={handleChange}
-                    disabled={movimiento.movimientoCerrado}
+                    disabled={!movimiento.movimientoCerrado}
                 />{' '}
             </label>
             <br />

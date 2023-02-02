@@ -7,13 +7,13 @@ function Task() {
         <>
             <h2>Equipo {id}</h2>
             <nav>
-                <Link to={`/equipo/${id}/cargarMovimiento`}>
+                <Link to={`/equipos/${id}/cargarMovimiento`}>
                     Cargar Movimiento
                 </Link>
-                <Link to={`/equipo/${id}/cargarCombustible`}>
+                <Link to={`/equipos/${id}/cargarCombustible`}>
                     Cargar Combustible
                 </Link>
-                <Link to={`/equipo/${id}/Movimientos`}>Movimientos</Link>
+                <Link to={`/equipos/${id}/Movimientos`}>Movimientos</Link>
             </nav>
         </>
     );

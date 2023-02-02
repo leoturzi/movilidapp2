@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getMovimientosEquipo } from '../../../firebase';
+import { getMovimientosEquipo } from '../../../../firebase';
 
 function Detail() {
     const { id: equipoId } = useParams();
@@ -22,6 +22,7 @@ function Detail() {
         if (!movimientos) {
             fetchMovimientos();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return !movimientos ? (
