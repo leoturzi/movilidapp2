@@ -1,32 +1,36 @@
 import React from 'react';
-import FormCargaMovimiento from './components/equipo/form/FormCargaMovimiento';
-import Detail from './components/equipo/detail/Detail';
+import FormCargaMovimiento from './components/equipos/equipo/form/FormCargaMovimiento';
+import Detail from './components/equipos/equipo/detail/Detail';
 import Task from './components/task/Task';
+import Equipos from './components/equipos/Equipos';
 
 import { Routes, Route, HashRouter } from 'react-router-dom';
 
 function App() {
     return (
-        <HashRouter>
-            <Routes>
-                <Route
-                    exact
-                    path='/equipo/:id/cargarMovimiento'
-                    element={<FormCargaMovimiento type='movimiento' />}
-                />
-                <Route
-                    exact
-                    path='/equipo/:id/cargarCombustible'
-                    element={<FormCargaMovimiento type='combustible' />}
-                />
-                <Route
-                    exact
-                    path='/equipo/:id/movimientos'
-                    element={<Detail />}
-                />
-                <Route exact path='/equipo/:id' element={<Task />} />
-            </Routes>
-        </HashRouter>
+        <>
+            <HashRouter>
+                <Routes>
+                    <Route
+                        exact
+                        path='/equipos/:id/cargarMovimiento'
+                        element={<FormCargaMovimiento />}
+                    />
+                    <Route
+                        exact
+                        path='/equipos/:id/cargarCombustible'
+                        element={<FormCargaMovimiento />}
+                    />
+                    <Route
+                        exact
+                        path='/equipos/:id/movimientos'
+                        element={<Detail />}
+                    />
+                    <Route exact path='/equipos/:id' element={<Task />} />
+                    <Route exact path='/equipos' element={<Equipos />} />
+                </Routes>
+            </HashRouter>
+        </>
     );
 }
 
