@@ -25,8 +25,11 @@ function FormCargarMovimiento() {
             try {
                 const { data: lastMovimiento, id: movimientoId } =
                     await getLastMovimientoEquipo(equipoId);
-
-                setMovimiento({ movimientoId, ...lastMovimiento });
+                if (lastMovimiento === 'no hay movimientos') {
+                    setMovimiento({ movimientoId, lastMovimiento });
+                } else {
+                    setMovimiento({ movimientoId, ...lastMovimiento });
+                }
                 setLoading(false);
             } catch (error) {
                 console.error(error);
@@ -46,15 +49,15 @@ function FormCargarMovimiento() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (!movimiento.movimientoCerrado) {
+        if (!movimiento.movimientoCerrado && movimiento.movimientoId !== 1) {
             updateMovimiento(formData, movimiento.movimientoId);
             clear();
-            history(`/equipo/${equipoId}`);
+            history(`/equipos/${equipoId}`);
             return;
         }
         cargarMovimiento(formData);
         clear();
-        history(`/equipo/${equipoId}`);
+        history(`/equipos/${equipoId}`);
     };
 
     const clear = () => {
@@ -73,12 +76,17 @@ function FormCargarMovimiento() {
 
     return (
         <form id='cargar_movimiento' onSubmit={handleSubmit}>
+            {console.log(movimiento)}
             <h2>{`Equipo ${equipoId}`}</h2>
-            <h3>
-                Ultimo movimiento:{' '}
-                {movimiento.movimientoCerrado ? 'Retiro ' : 'Colocacion '}
-                {`${movimiento.aeronaveMatricula} a las ${movimiento.createdAt}`}{' '}
-            </h3>
+            {movimiento.movimientoId === 1 ? (
+                <h3>No hay movimientos disponibles para {equipoId}</h3>
+            ) : (
+                <h3>
+                    Ultimo movimiento:{' '}
+                    {movimiento.movimientoCerrado ? 'Retiro ' : 'Colocacion '}
+                    {`${movimiento.aeronaveMatricula} a las ${movimiento.createdAt}`}{' '}
+                </h3>
+            )}
             <label htmlFor='workHours'>
                 Horas de Trabajo
                 <input
@@ -92,18 +100,28 @@ function FormCargarMovimiento() {
             <br />
             <label htmlFor='aircraft'>
                 Aeronave
-                <input
-                    type='text'
-                    name='aircraft'
-                    id='aircraft'
-                    value={
-                        !movimiento.movimientoCerrado
-                            ? movimiento.aeronaveMatricula
-                            : formData.aircraft
-                    }
-                    onChange={handleChange}
-                    disabled={!movimiento.movimientoCerrado}
-                />{' '}
+                {movimiento.movimientoId === 1 ? (
+                    <input
+                        type='text'
+                        name='aircraft'
+                        id='aircraft'
+                        value={formData.aircraft}
+                        onChange={handleChange}
+                    />
+                ) : (
+                    <input
+                        type='text'
+                        name='aircraft'
+                        id='aircraft'
+                        value={
+                            !movimiento.movimientoCerrado
+                                ? movimiento.aeronaveMatricula
+                                : formData.aircraft
+                        }
+                        onChange={handleChange}
+                        disabled={!movimiento.movimientoCerrado}
+                    />
+                )}
             </label>
             <br />
             <label htmlFor='time'>
