@@ -86,21 +86,20 @@ export async function getLastMovimientoEquipo(equipodId) {
         orderByChild('equipo'),
         equalTo(equipodId)
     );
-    if (queryMovimientos) {
-        try {
-            const snapshot = await get(queryMovimientos);
-            if (snapshot.exists()) {
-                const id = Object.keys(snapshot.val())[0];
-                const data = snapshot.val()[id];
-                return { data, id };
-            } else {
-                console.log('No data available');
-            }
-        } catch (error) {
-            console.log(error);
+
+    try {
+        const snapshot = await get(queryMovimientos);
+        if (snapshot.exists()) {
+            console.log(snapshot.val());
+            const id = Object.keys(snapshot.val())[0];
+            const data = snapshot.val()[id];
+            return { data, id };
+        } else {
+            return { data: 'no hay movimientos', id: 1 };
         }
+    } catch (error) {
+        console.log(error);
     }
-    return { data: 'no hay movimientos', id: 1 };
 }
 
 export async function getEquipos() {
