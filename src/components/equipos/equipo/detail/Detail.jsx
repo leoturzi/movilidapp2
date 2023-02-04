@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getMovimientosEquipo } from '../../../../firebase';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 function Detail() {
     const { id: equipoId } = useParams();
@@ -28,26 +35,26 @@ function Detail() {
     return !movimientos ? (
         <h3>...Cargando Movimientos</h3>
     ) : (
-        <table>
-            <thead>
-                <tr>
+        <Table>
+            <TableHead>
+                <TableRow>
                     {headerKeys.map((key) => (
-                        <th key={key}>{key}</th>
+                        <TableCell key={key}>{key}</TableCell>
                     ))}
-                </tr>
-            </thead>
-            <tbody>
+                </TableRow>
+            </TableHead>
+            <TableBody>
                 {Object.keys(movimientos).map((movimientoId) => (
-                    <tr key={movimientoId}>
+                    <TableRow key={movimientoId}>
                         {headerKeys.map((headerKey) => (
-                            <td key={headerKey}>
+                            <TableCell sx={{ minWidth: 200 }} key={headerKey}>
                                 {movimientos[movimientoId][headerKey]}
-                            </td>
+                            </TableCell>
                         ))}
-                    </tr>
+                    </TableRow>
                 ))}
-            </tbody>
-        </table>
+            </TableBody>
+        </Table>
     );
 }
 
