@@ -1,5 +1,6 @@
 import React from 'react';
 import FormCargaMovimiento from './components/equipos/equipo/form/FormCargaMovimiento';
+import FormCargaCombustible from './components/equipos/equipo/form/FormCargaCombustible';
 import Detail from './components/equipos/equipo/detail/Detail';
 import Task from './components/task/Task';
 import Equipos from './components/equipos/Equipos';
@@ -21,7 +22,7 @@ function App() {
                     <Route
                         exact
                         path='/equipos/:id/cargarCombustible'
-                        element={<FormCargaMovimiento />}
+                        element={<FormCargaCombustible />}
                     />
                     <Route
                         exact
