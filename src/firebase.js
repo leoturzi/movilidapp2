@@ -79,12 +79,12 @@ export async function getMovimientosEquipo(equipoId) {
         console.log(error);
     }
 }
-export async function getLastMovimientoEquipo(equipodId) {
+export async function getLastMovimientoEquipo(equipoId) {
     const queryMovimientos = query(
         ref(db, 'Movimientos'),
         limitToLast(1),
         orderByChild('equipo'),
-        equalTo(equipodId)
+        equalTo(equipoId)
     );
 
     try {
@@ -111,6 +111,46 @@ export async function getEquipos() {
             return snapshot.val();
         } else {
             console.log('No data available');
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function cargarCombustible(formData) {
+    const cargas = ref(db, 'Combustible');
+    try {
+        const nuevaCarga = push(cargas);
+        set(nuevaCarga, {
+            equipo: formData.unit,
+            liters: formData.liters,
+            hsCarga: formData.time,
+            createdAt: moment
+                .tz('America/Argentina/Buenos_Aires')
+                .format('YYYY-MM-DD h:mm:ss a'),
+        });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+export async function getUltimaCarga(equipoId) {
+    const queryCarga = query(
+        ref(db, 'Combustible'),
+        limitToLast(1),
+        orderByChild('equipo'),
+        equalTo(equipoId)
+    );
+
+    try {
+        const snapshot = await get(queryCarga);
+        if (snapshot.exists()) {
+            console.log(snapshot.val());
+            const id = Object.keys(snapshot.val())[0];
+            const data = snapshot.val()[id];
+            return { data, id };
+        } else {
+            return { data: 'no hay cargas', id: 1 };
         }
     } catch (error) {
         console.log(error);
