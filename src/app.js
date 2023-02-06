@@ -3,6 +3,7 @@ import FormCargaMovimiento from './components/equipos/equipo/form/FormCargaMovim
 import Detail from './components/equipos/equipo/detail/Detail';
 import Task from './components/task/Task';
 import Equipos from './components/equipos/Equipos';
+import NavBar from './components/layout/navBar/NavBar';
 
 import { Routes, Route, HashRouter } from 'react-router-dom';
 
@@ -10,6 +11,7 @@ function App() {
     return (
         <>
             <HashRouter>
+                <NavBar />
                 <Routes>
                     <Route
                         exact

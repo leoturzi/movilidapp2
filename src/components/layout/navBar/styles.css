@@ -1,0 +1,13 @@
+.toolbarMenu {
+    justify-content: space-between;
+}
+
+.toolbarMenu_item {
+    text-decoration: none;
+    color: white;
+}
+
+.toolbarMenu_item_colored {
+    text-decoration: none;
+    color: rgb(33, 33, 33);
+}
