@@ -70,6 +70,7 @@ export async function getMovimientosEquipo(equipoId) {
 
     try {
         const snapshot = await get(queryMovimientos);
+        console.log(snapshot.val());
         if (snapshot.exists()) {
             return snapshot.val();
         } else {
@@ -156,3 +157,39 @@ export async function getUltimaCarga(equipoId) {
         console.log(error);
     }
 }
+
+export async function login(user, pwd) {
+    const userLowerCase = user.toLowerCase();
+    const queryUsuarios = query(
+        ref(db, 'Usuarios'),
+        orderByChild('username'),
+        equalTo(userLowerCase)
+    );
+
+    try {
+        const snapshot = await get(queryUsuarios);
+        if (snapshot.exists()) {
+            const id = Object.keys(snapshot.val())[0];
+            const data = snapshot.val()[id];
+            console.log(id, data);
+            if (data.password === pwd) {
+                delete data.password;
+                return { data, id };
+            } else {
+                return {
+                    data: {
+                        errorMessage: 'Contraseña incorrecta',
+                        errorCode: 1,
+                    },
+                };
+            }
+        } else {
+            return {
+                data: { errorMessage: 'Usuario no encontrado', errorCode: 2 },
+            };
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
