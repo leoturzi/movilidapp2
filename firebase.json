@@ -1,7 +1,16 @@
 {
-    "hosting": {
-        "site": "movilidapp-33cef",
-        "public": "build",
-        "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
-    }
+  "hosting": {
+    "public": "build",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
 }
