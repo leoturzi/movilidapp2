@@ -6,6 +6,7 @@ import Task from './components/task/Task';
 import Equipos from './components/equipos/Equipos';
 import NavBar from './components/layout/navBar/NavBar';
 import Login from './components/login/Login';
+import PrivateWrapper from './components/PrivateWrapper';
 
 import { Routes, Route, HashRouter } from 'react-router-dom';
 
@@ -16,22 +17,40 @@ function App() {
                 <NavBar />
                 <Routes>
                     <Route
-                        exact
                         path='/equipos/:id/cargarMovimiento'
-                        element={<FormCargaMovimiento />}
-                    />
+                        element={<PrivateWrapper />}
+                    >
+                        <Route
+                            path='/equipos/:id/cargarMovimiento'
+                            element={<FormCargaMovimiento />}
+                        />
+                    </Route>
                     <Route
-                        exact
                         path='/equipos/:id/cargarCombustible'
-                        element={<FormCargaCombustible />}
-                    />
+                        element={<PrivateWrapper />}
+                    >
+                        <Route
+                            exact
+                            path='/equipos/:id/cargarCombustible'
+                            element={<FormCargaCombustible />}
+                        />
+                    </Route>
                     <Route
-                        exact
                         path='/equipos/:id/movimientos'
-                        element={<Detail />}
-                    />
-                    <Route exact path='/equipos/:id' element={<Task />} />
-                    <Route exact path='/equipos' element={<Equipos />} />
+                        element={<PrivateWrapper />}
+                    >
+                        <Route
+                            exact
+                            path='/equipos/:id/movimientos'
+                            element={<Detail />}
+                        />
+                    </Route>
+                    <Route path='/equipos/:id' element={<PrivateWrapper />}>
+                        <Route exact path='/equipos/:id' element={<Task />} />
+                    </Route>
+                    <Route path='/equipos' element={<PrivateWrapper />}>
+                        <Route exact path='/equipos' element={<Equipos />} />
+                    </Route>
                     <Route exact path='/login' element={<Login />} />
                 </Routes>
             </HashRouter>

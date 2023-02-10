@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,7 +11,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import logo from '../../../public/img/logo.png';
 import './styles.css';
 
@@ -25,6 +25,19 @@ const settings = ['Profile', 'Logout'];
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
+    const [userLogged, setUserLogged] = useState(null);
+    const history = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        console.log('entre al use effect');
+        const user = localStorage.getItem('user');
+        console.log(user);
+        if (user) {
+            const userAbbr = JSON.parse(user).substring(0, 2).toUpperCase();
+            setUserLogged(userAbbr);
+        }
+    }, [location]);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -37,7 +50,17 @@ function ResponsiveAppBar() {
         setAnchorElNav(null);
     };
 
-    const handleCloseUserMenu = () => {
+    const handleCloseUserMenu = (event) => {
+        if (event.target.innerText === 'Logout') {
+            handleLogout();
+        }
+        setAnchorElNav(null);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        setUserLogged(null);
+        history('/login');
         setAnchorElUser(null);
     };
 
@@ -129,7 +152,7 @@ function ResponsiveAppBar() {
                                 onClick={handleOpenUserMenu}
                                 sx={{ p: 0 }}
                             >
-                                <Avatar>LT</Avatar>
+                                <Avatar>{userLogged ? userLogged : ''}</Avatar>
                             </IconButton>
                         </Tooltip>
                         <Menu

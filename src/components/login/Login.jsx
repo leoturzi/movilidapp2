@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../firebase';
 
@@ -7,6 +7,13 @@ function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
     const history = useNavigate();
+
+    useEffect(() => {
+        const user = localStorage.getItem('user');
+        if (user) {
+            history('/equipos');
+        }
+    }, [history]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
