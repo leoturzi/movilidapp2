@@ -13,6 +13,7 @@ import {
 } from 'firebase/database';
 
 import moment from 'moment-timezone';
+import { mapDataWithHeaders } from './utils-firebase';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDeCfv7Bl66VgRZFGohqpfcFwclvnCwhtg',
@@ -56,7 +57,7 @@ export function updateMovimiento(formData, movimientoId) {
             .tz('America/Argentina/Buenos_Aires')
             .format('YYYY-MM-DD h:mm:ss a'),
         movimientoCerrado: true,
-        hsEntrega: formData.time,
+        hsRetiro: formData.time,
         hsTrabajoFin: formData.workHours,
     });
 }
@@ -70,9 +71,10 @@ export async function getMovimientosEquipo(equipoId) {
 
     try {
         const snapshot = await get(queryMovimientos);
-        console.log(snapshot.val());
+
         if (snapshot.exists()) {
-            return snapshot.val();
+            const mappedData = mapDataWithHeaders(snapshot.val());
+            return mappedData;
         } else {
             console.log('No data available');
         }
@@ -192,4 +194,3 @@ export async function login(user, pwd) {
         console.log(error);
     }
 }
-

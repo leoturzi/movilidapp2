@@ -6,22 +6,25 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import TableContainer from '@mui/material/TableContainer';
+import Paper from '@mui/material/Paper';
+import Container from '@mui/material/Container';
 
 function Detail() {
     const { id: equipoId } = useParams();
 
     const [movimientos, setMovimientos] = useState(null);
-    const [headerKeys, setHeaderKeys] = useState([]);
+    const [headers, setHeader] = useState([]);
 
     useEffect(() => {
         const fetchMovimientos = async () => {
             const data = await getMovimientosEquipo(equipoId);
+            console.log(data);
             if (data) {
-                setMovimientos(data);
-                setHeaderKeys(() => {
-                    const movimientoId = Object.keys(data)[0];
-                    return Object.keys(data[movimientoId]);
-                });
+                const tableHeaders = data[0];
+                const tableData = data.slice(1);
+                setHeader(tableHeaders);
+                setMovimientos(tableData);
             }
         };
         if (!movimientos) {
@@ -33,26 +36,33 @@ function Detail() {
     return !movimientos ? (
         <h3>...Cargando Movimientos</h3>
     ) : (
-        <Table>
-            <TableHead>
-                <TableRow>
-                    {headerKeys.map((key) => (
-                        <TableCell key={key}>{key}</TableCell>
-                    ))}
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {Object.keys(movimientos).map((movimientoId) => (
-                    <TableRow key={movimientoId}>
-                        {headerKeys.map((headerKey) => (
-                            <TableCell sx={{ minWidth: 200 }} key={headerKey}>
-                                {movimientos[movimientoId][headerKey]}
-                            </TableCell>
+        <Container maxWidth='l'>
+            <h2>Movimientos</h2>
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            {Object.entries(headers).map(
+                                ([key, value], idx) => (
+                                    <TableCell key={idx}>{value}</TableCell>
+                                )
+                            )}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {movimientos.map((row, idx) => (
+                            <TableRow key={idx}>
+                                {Object.entries(row).map(
+                                    ([key, value], idx) => (
+                                        <TableCell key={idx}>{value}</TableCell>
+                                    )
+                                )}
+                            </TableRow>
                         ))}
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table>
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Container>
     );
 }
 
