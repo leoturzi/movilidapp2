@@ -54,7 +54,7 @@ function ResponsiveAppBar() {
         if (event.target.innerText === 'Logout') {
             handleLogout();
         }
-        setAnchorElNav(null);
+        setAnchorElUser(null);
     };
 
     const handleLogout = () => {
@@ -171,16 +171,32 @@ function ResponsiveAppBar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
+                            {!userLogged ? (
                                 <MenuItem
-                                    key={setting}
+                                    key='login'
                                     onClick={handleCloseUserMenu}
                                 >
                                     <Typography textAlign='center'>
-                                        {setting}
+                                        <Link
+                                            to={`/login`}
+                                            className='toolbarMenu_item_colored'
+                                        >
+                                            Login
+                                        </Link>
                                     </Typography>
                                 </MenuItem>
-                            ))}
+                            ) : (
+                                settings.map((setting) => (
+                                    <MenuItem
+                                        key={setting}
+                                        onClick={handleCloseUserMenu}
+                                    >
+                                        <Typography textAlign='center'>
+                                            {setting}
+                                        </Typography>
+                                    </MenuItem>
+                                ))
+                            )}
                         </Menu>
                     </Box>
                 </Toolbar>
