@@ -93,7 +93,6 @@ export async function getLastMovimientoEquipo(equipoId) {
     try {
         const snapshot = await get(queryMovimientos);
         if (snapshot.exists()) {
-            console.log(snapshot.val());
             const id = Object.keys(snapshot.val())[0];
             const data = snapshot.val()[id];
             return { data, id };
@@ -148,7 +147,6 @@ export async function getUltimaCarga(equipoId) {
     try {
         const snapshot = await get(queryCarga);
         if (snapshot.exists()) {
-            console.log(snapshot.val());
             const id = Object.keys(snapshot.val())[0];
             const data = snapshot.val()[id];
             return { data, id };
@@ -173,7 +171,6 @@ export async function login(user, pwd) {
         if (snapshot.exists()) {
             const id = Object.keys(snapshot.val())[0];
             const data = snapshot.val()[id];
-            console.log(id, data);
             if (data.password === pwd) {
                 delete data.password;
                 return { data, id };

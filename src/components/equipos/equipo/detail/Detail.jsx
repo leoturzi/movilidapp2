@@ -19,7 +19,6 @@ function Detail() {
     useEffect(() => {
         const fetchMovimientos = async () => {
             const data = await getMovimientosEquipo(equipoId);
-            console.log(data);
             if (data) {
                 const tableHeaders = data[0];
                 const tableData = data.slice(1);

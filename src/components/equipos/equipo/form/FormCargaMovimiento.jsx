@@ -76,7 +76,6 @@ function FormCargarMovimiento() {
 
     return (
         <form id='cargar_movimiento' onSubmit={handleSubmit}>
-            {console.log(movimiento)}
             <h2>{`Equipo ${equipoId}`}</h2>
             {movimiento.movimientoId === 1 ? (
                 <h3>No hay movimientos disponibles para {equipoId}</h3>

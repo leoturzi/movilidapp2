@@ -30,9 +30,7 @@ function ResponsiveAppBar() {
     const location = useLocation();
 
     useEffect(() => {
-        console.log('entre al use effect');
         const user = localStorage.getItem('user');
-        console.log(user);
         if (user) {
             const userAbbr = JSON.parse(user).substring(0, 2).toUpperCase();
             setUserLogged(userAbbr);
