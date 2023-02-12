@@ -21,7 +21,6 @@ function Equipos() {
             return null;
         }
         const equiposId = Object.keys(equipos);
-        console.log(equipos);
         const links = equiposId.map((id) => (
             <Link key={id} to={`/equipos/${id}`}>
                 {' '}
