@@ -3,6 +3,7 @@ import { getEquipos } from '../../firebase';
 
 import { Container, Stack, Typography } from '@mui/material';
 import CustomButton from '../CustomButton';
+import Loading from '../common/Loading';
 
 function Equipos() {
     const [equipos, setEquipos] = useState(null);
@@ -35,7 +36,7 @@ function Equipos() {
     return (
         <Container>
             {!equipos ? (
-                <h4>...Cargando Equipos</h4>
+                <Loading />
             ) : (
                 <>
                     <Typography

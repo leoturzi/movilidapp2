@@ -7,6 +7,7 @@ import {
 } from '../../../../firebase';
 import { useParams, useNavigate } from 'react-router-dom';
 
+import Loading from '../../../common/Loading';
 import {
     Typography,
     Container,
@@ -83,7 +84,7 @@ function FormCargarMovimiento() {
     };
 
     if (loading) {
-        return <h5>Cargando...</h5>;
+        return <Loading />;
     }
 
     return (
