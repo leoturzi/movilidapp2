@@ -7,6 +7,18 @@ import {
 } from '../../../../firebase';
 import { useParams, useNavigate } from 'react-router-dom';
 
+import {
+    Typography,
+    Container,
+    Stack,
+    Button,
+    TextField,
+    Select,
+    MenuItem,
+    InputLabel,
+    FormControl,
+} from '@mui/material';
+
 function FormCargarMovimiento() {
     const { id: equipoId } = useParams();
     const history = useNavigate();
@@ -75,69 +87,122 @@ function FormCargarMovimiento() {
     }
 
     return (
-        <form id='cargar_movimiento' onSubmit={handleSubmit}>
-            <h2>{`Equipo ${equipoId}`}</h2>
-            {movimiento.movimientoId === 1 ? (
-                <h3>No hay movimientos disponibles para {equipoId}</h3>
-            ) : (
-                <h3>
-                    Ultimo movimiento:{' '}
-                    {movimiento.movimientoCerrado ? 'Retiro ' : 'Colocacion '}
-                    {`${movimiento.aeronaveMatricula} a las ${movimiento.createdAt}`}{' '}
-                </h3>
-            )}
-            <label htmlFor='workHours'>
-                Horas de Trabajo
-                <input
-                    type='text'
-                    name='workHours'
-                    id='workHours'
-                    value={formData.workHours}
-                    onChange={handleChange}
-                />{' '}
-            </label>
-            <br />
-            <label htmlFor='aircraft'>
-                Aeronave
+        <Container>
+            <form id='cargar_movimiento' onSubmit={handleSubmit}>
+                <Typography
+                    variant={'h4'}
+                    sx={{
+                        marginTop: '2rem',
+                        textAlign: 'center',
+                    }}
+                    color={''}
+                >
+                    Equipo {equipoId}
+                </Typography>
                 {movimiento.movimientoId === 1 ? (
-                    <input
-                        type='text'
-                        name='aircraft'
-                        id='aircraft'
-                        value={formData.aircraft}
-                        onChange={handleChange}
-                    />
+                    <h3>No hay movimientos disponibles para {equipoId}</h3>
                 ) : (
-                    <input
-                        type='text'
-                        name='aircraft'
-                        id='aircraft'
-                        value={
-                            !movimiento.movimientoCerrado
-                                ? movimiento.aeronaveMatricula
-                                : formData.aircraft
-                        }
-                        onChange={handleChange}
-                        disabled={!movimiento.movimientoCerrado}
-                    />
+                    <Stack
+                        mt={2}
+                        mb={2}
+                        bgcolor={'#FFCC00'}
+                        p={1}
+                        borderRadius={1}
+                        boxShadow={2}
+                    >
+                        <Typography variant='h6' textAlign={'center'}>
+                            Ultimo movimiento{' '}
+                        </Typography>
+                        <Typography textAlign={'center'}>
+                            {movimiento.movimientoCerrado
+                                ? 'Se retiro de '
+                                : 'Se coloco en '}
+                            {`${movimiento.aeronaveMatricula} el dia ${
+                                movimiento.createdAt.split(' ')[0]
+                            } a las ${movimiento.hsEntrega}`}
+                        </Typography>
+                    </Stack>
                 )}
-            </label>
-            <br />
-            <label htmlFor='time'>
-                Hora de Entrega
-                <input
-                    type='time'
-                    name='time'
-                    id='time'
-                    value={formData.time}
-                    onChange={handleChange}
-                />
-            </label>
-            <br />
-            <button id='submit' type='submit' disabled={loading}>
-                Cargar
-            </button>
-        </form>
+                <Stack gap={2}>
+                    <TextField
+                        size='small'
+                        label='Horas de Trabajo'
+                        variant='outlined'
+                        name='workHours'
+                        id='workHours'
+                        value={formData.workHours}
+                        onChange={handleChange}
+                    />
+
+                    {movimiento.movimientoId === 1 ? (
+                        <FormControl size='small'>
+                            <InputLabel id='aircraft-label'>
+                                Aeronave
+                            </InputLabel>
+                            <Select
+                                name='aircraft'
+                                labelId='aircraft-label'
+                                id='aircraft'
+                                value={formData.aircraft}
+                                label='Aeronave'
+                                onChange={handleChange}
+                            >
+                                <MenuItem value=''>
+                                    <em>None</em>
+                                </MenuItem>
+                                <MenuItem value='TC-52'>TC-52</MenuItem>
+                                <MenuItem value='TC-53'>TC-53</MenuItem>
+                                <MenuItem value='TC-54'>TC-54</MenuItem>
+                            </Select>
+                        </FormControl>
+                    ) : (
+                        <>
+                            <FormControl
+                                disabled={!movimiento.movimientoCerrado}
+                                size='small'
+                            >
+                                <InputLabel id='aircraft-label'>
+                                    Aeronave
+                                </InputLabel>
+                                <Select
+                                    name='aircraft'
+                                    labelId='aircraft-label'
+                                    id='aircraft'
+                                    value={
+                                        !movimiento.movimientoCerrado
+                                            ? movimiento.aeronaveMatricula
+                                            : formData.aircraft
+                                    }
+                                    label='Aeronave'
+                                    onChange={handleChange}
+                                >
+                                    <MenuItem value=''>
+                                        <em>None</em>
+                                    </MenuItem>
+                                    <MenuItem value='TC-52'>TC-52</MenuItem>
+                                    <MenuItem value='TC-53'>TC-53</MenuItem>
+                                    <MenuItem value='TC-54'>TC-54</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </>
+                    )}
+
+                    <TextField
+                        size='small'
+                        id='time'
+                        name='time'
+                        type='time'
+                        label='Hora'
+                        onChange={handleChange}
+                        value={formData.time}
+                    />
+
+                    <Button type='submit' size='large'>
+                        Cargar
+                    </Button>
+                </Stack>
+            </form>
+        </Container>
     );
 }
 
