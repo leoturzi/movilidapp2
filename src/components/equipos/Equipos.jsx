@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { getEquipos } from '../../firebase';
 
-import { Container, Stack, Button, Typography } from '@mui/material';
+import { Container, Stack, Typography } from '@mui/material';
+import CustomButton from '../CustomButton';
+import Loading from '../common/Loading';
 
 function Equipos() {
     const [equipos, setEquipos] = useState(null);
@@ -24,30 +25,18 @@ function Equipos() {
         }
         const equiposId = Object.keys(equipos);
         const links = equiposId.map((id) => (
-            <Link
+            <CustomButton
                 key={id}
                 to={`/equipos/${id}`}
-                style={{
-                    textDecoration: 'none',
-                }}
-            >
-                <Button
-                    variant={'contained'}
-                    sx={{
-                        color: 'white',
-                        width: '200px',
-                    }}
-                >
-                    {equipos[id]['longDesc']}
-                </Button>
-            </Link>
+                text={equipos[id]['longDesc']}
+            />
         ));
         return links;
     };
     return (
         <Container>
             {!equipos ? (
-                <h4>...Cargando Equipos</h4>
+                <Loading />
             ) : (
                 <>
                     <Typography
@@ -56,7 +45,7 @@ function Equipos() {
                             marginTop: '2rem',
                             textAlign: 'center',
                         }}
-                        color={'GrayText'}
+                        color={''}
                     >
                         Equipos Movilidad
                     </Typography>

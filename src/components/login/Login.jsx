@@ -2,14 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../firebase';
 
-import {
-    Typography,
-    Container,
-    TextField,
-    Button,
-    Grid,
-    Stack,
-} from '@mui/material';
+import { Typography, Container, TextField, Button, Stack } from '@mui/material';
 
 function Login() {
     const [username, setUsername] = useState('');

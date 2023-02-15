@@ -1,20 +1,48 @@
 import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Typography, Container, Stack } from '@mui/material';
+import CustomButton from '../CustomButton';
 
 function Task() {
     const { id } = useParams();
     return (
         <>
-            <h2>Equipo {id}</h2>
-            <nav>
-                <Link to={`/equipos/${id}/cargarMovimiento`}>
-                    Cargar Movimiento
-                </Link>
-                <Link to={`/equipos/${id}/cargarCombustible`}>
-                    Cargar Combustible
-                </Link>
-                <Link to={`/equipos/${id}/Movimientos`}>Movimientos</Link>
-            </nav>
+            <Container>
+                <Typography
+                    variant={'h4'}
+                    sx={{
+                        marginTop: '2rem',
+                        textAlign: 'center',
+                    }}
+                    color={''}
+                >
+                    Equipo {id}
+                </Typography>
+                <nav>
+                    <Stack
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            marginTop: '2rem',
+                        }}
+                        spacing={2}
+                    >
+                        <CustomButton
+                            to={`/equipos/${id}/cargarMovimiento`}
+                            text='Movimiento'
+                        />
+                        <CustomButton
+                            to={`/equipos/${id}/cargarCombustible`}
+                            text='Combustible'
+                        />
+                        <CustomButton
+                            to={`/equipos/${id}/Movimientos`}
+                            text='Movimientos'
+                        />
+                    </Stack>
+                </nav>
+            </Container>
         </>
     );
 }
