@@ -34,7 +34,7 @@ function Login() {
             return;
         }
 
-        localStorage.setItem('user', JSON.stringify(data.username));
+        localStorage.setItem('user', data.username);
         history('/equipos');
     };
 

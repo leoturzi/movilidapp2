@@ -31,6 +31,7 @@ function FormCargarMovimiento() {
         workHours: '',
         aircraft: '',
         time: moment.tz('America/Argentina/Buenos_Aires').format('hh:mm'),
+        user: localStorage.getItem('user'),
     });
 
     useEffect(() => {
