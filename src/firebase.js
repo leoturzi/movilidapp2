@@ -44,6 +44,7 @@ export function cargarMovimiento(formData) {
             createdAt: moment
                 .tz('America/Argentina/Buenos_Aires')
                 .format('YYYY-MM-DD h:mm:ss a'),
+            user: formData.user,
         });
     } catch (error) {
         console.log(error.message);

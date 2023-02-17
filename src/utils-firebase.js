@@ -1,12 +1,5 @@
 import moment from 'moment';
 
-function calculateWorkingHrs(hr1, hr2) {
-    const mins = (hr2 - hr1) * 60;
-    const hrs = Math.floor(mins / 60);
-    const minsLeft = mins % 60;
-    return `${hrs}h, ${minsLeft}m`;
-}
-
 export function mapDataWithHeaders(rawData) {
     const headers = {
         aeronaveMatricula: 'Aeronave',
@@ -18,6 +11,7 @@ export function mapDataWithHeaders(rawData) {
         hsTrabajoInicio: 'hs Trabajo Inicio',
         hsTrabajoFin: 'hs Trabajo Fin',
         hsTrabajo: 'hs Trabajo',
+        user: 'Operador',
     };
 
     const movIds = Object.keys(rawData);
@@ -42,9 +36,19 @@ export function mapDataWithHeaders(rawData) {
                 rawData[movId].hsTrabajoInicio,
                 rawData[movId].hsTrabajoFin
             ),
+            user: rawData[movId].user,
         };
         return [...acc, movData];
     }, []);
 
     return [headers, ...data];
+}
+
+function calculateWorkingHrs(hr1, hr2) {
+    if (hr2 === undefined) return '';
+    const mins = (hr2 - hr1) * 6;
+    const hrs =
+        Math.floor(mins / 60) === 0 ? '' : `${Math.floor(mins / 60)}hs, `;
+    const minsLeft = `${mins % 60} mins`;
+    return `${hrs} ${minsLeft}`;
 }
