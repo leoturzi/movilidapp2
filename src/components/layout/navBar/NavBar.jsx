@@ -32,7 +32,7 @@ function ResponsiveAppBar() {
     useEffect(() => {
         const user = localStorage.getItem('user');
         if (user) {
-            const userAbbr = JSON.parse(user).substring(0, 2).toUpperCase();
+            const userAbbr = user.substring(0, 2).toUpperCase();
             setUserLogged(userAbbr);
         }
     }, [location]);

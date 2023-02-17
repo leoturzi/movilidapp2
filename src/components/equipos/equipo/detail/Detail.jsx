@@ -9,6 +9,8 @@ import TableRow from '@mui/material/TableRow';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
+import Loading from '../../../common/Loading';
+import { Typography } from '@mui/material';
 
 function Detail() {
     const { id: equipoId } = useParams();
@@ -33,10 +35,28 @@ function Detail() {
     }, []);
 
     return !movimientos ? (
-        <h3>...Cargando Movimientos</h3>
+        <Loading />
     ) : (
         <Container maxWidth='l'>
-            <h2>Movimientos</h2>
+            <Typography
+                variant={'h4'}
+                sx={{
+                    marginTop: '1rem',
+                    marginBottom: '1rem',
+                }}
+                color={''}
+            >
+                Equipo {equipoId}
+            </Typography>
+            <Typography
+                variant={'h5'}
+                sx={{
+                    marginBottom: '1rem',
+                }}
+                color={''}
+            >
+                Registro
+            </Typography>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
