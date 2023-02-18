@@ -4,6 +4,7 @@ import {
     cargarMovimiento,
     getLastMovimientoEquipo,
     updateMovimiento,
+    getAeronaves,
 } from '../../../../firebase';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -26,6 +27,7 @@ function FormCargarMovimiento() {
 
     const [loading, setLoading] = useState(true);
     const [movimiento, setMovimiento] = useState(null);
+    const [aeronaves, setAeronaves] = useState([]);
     const [formData, setFormData] = useState({
         unit: equipoId,
         workHours: '',
@@ -49,6 +51,15 @@ function FormCargarMovimiento() {
                 console.error(error);
             }
         };
+
+        const fetchAeronavesData = async () => {
+            const aeronaves = await getAeronaves();
+            setAeronaves(aeronaves);
+        };
+
+        if (!aeronaves.length) {
+            fetchAeronavesData();
+        }
 
         fetchMovimientosData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -149,12 +160,11 @@ function FormCargarMovimiento() {
                                 label='Aeronave'
                                 onChange={handleChange}
                             >
-                                <MenuItem value=''>
-                                    <em>None</em>
-                                </MenuItem>
-                                <MenuItem value='TC-52'>TC-52</MenuItem>
-                                <MenuItem value='TC-53'>TC-53</MenuItem>
-                                <MenuItem value='TC-54'>TC-54</MenuItem>
+                                {aeronaves.map((aeronave) => (
+                                    <MenuItem value={aeronave}>
+                                        {aeronave}
+                                    </MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
                     ) : (
@@ -178,12 +188,14 @@ function FormCargarMovimiento() {
                                     label='Aeronave'
                                     onChange={handleChange}
                                 >
-                                    <MenuItem value=''>
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value='TC-52'>TC-52</MenuItem>
-                                    <MenuItem value='TC-53'>TC-53</MenuItem>
-                                    <MenuItem value='TC-54'>TC-54</MenuItem>
+                                    {aeronaves.map((aeronave) => (
+                                        <MenuItem
+                                            key={aeronave}
+                                            value={aeronave}
+                                        >
+                                            {aeronave}
+                                        </MenuItem>
+                                    ))}
                                 </Select>
                             </FormControl>
                         </>

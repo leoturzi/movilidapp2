@@ -192,3 +192,19 @@ export async function login(user, pwd) {
         console.log(error);
     }
 }
+
+export async function getAeronaves() {
+    const queryAeronaves = query(ref(db, 'Aeronaves'));
+
+    try {
+        const snapshot = await get(queryAeronaves);
+        if (snapshot.exists()) {
+            const aeronaves = snapshot.val().slice(1, -1).split(', ');
+            return aeronaves;
+        } else {
+            console.log('No data available');
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
