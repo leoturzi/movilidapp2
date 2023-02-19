@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
 import { cargarCombustible, getUltimaCarga } from '../../../../firebase';
 import { useParams, useNavigate } from 'react-router-dom';
+import Loading from '../../../common/Loading';
+import { Button, Container, Stack, TextField, Typography } from '@mui/material';
 
 function FormCargaCombustible() {
     const { id: equipoId } = useParams();
@@ -61,46 +63,69 @@ function FormCargaCombustible() {
     };
 
     if (loading) {
-        return <h5>Cargando...</h5>;
+        return <Loading />;
     }
 
     return (
-        <form id='cargar_movimiento' onSubmit={handleSubmit}>
-            <h2>{`Equipo ${equipoId}`}</h2>
-            {carga.cargaId === 1 ? (
-                <h3>No se han efectuado cargas para el equipo {equipoId}</h3>
-            ) : (
-                <h3>
-                    Ultima carga:{' '}
-                    {`Se han cargado ${carga.liters} litros el dia ${carga.createdAt}`}
-                </h3>
-            )}
-            <label htmlFor='liters'>
-                Litros
-                <input
-                    type='text'
-                    name='liters'
-                    id='liters'
-                    value={formData.liters}
-                    onChange={handleChange}
-                />{' '}
-            </label>
-            <br />
-            <label htmlFor='time'>
-                Hora de carga
-                <input
-                    type='time'
-                    name='time'
-                    id='time'
-                    value={formData.time}
-                    onChange={handleChange}
-                />
-            </label>
-            <br />
-            <button id='submit' type='submit'>
-                Cargar
-            </button>
-        </form>
+        <Container>
+            <form id='cargar_movimiento' onSubmit={handleSubmit}>
+                <Typography
+                    variant={'h4'}
+                    sx={{
+                        marginTop: '2rem',
+                        textAlign: 'center',
+                    }}
+                    color={''}
+                >
+                    Equipo {equipoId}
+                </Typography>
+                {carga.cargaId === 1 ? (
+                    <h3>
+                        No se han efectuado cargas para el equipo {equipoId}
+                    </h3>
+                ) : (
+                    <Stack
+                        mt={2}
+                        mb={2}
+                        bgcolor={'#FFCC00'}
+                        p={1}
+                        borderRadius={1}
+                        boxShadow={2}
+                    >
+                        <Typography variant='h6' textAlign={'center'}>
+                            Ultima Carga
+                        </Typography>
+                        <Typography textAlign={'center'}>
+                            {`Se han cargado ${carga.liters} litros el dia ${carga.createdAt}`}
+                        </Typography>
+                    </Stack>
+                )}
+                <Stack gap={2}>
+                    <TextField
+                        size='small'
+                        label='Litros'
+                        variant='outlined'
+                        name='liters'
+                        id='liters'
+                        value={formData.liters}
+                        onChange={handleChange}
+                    />
+
+                    <TextField
+                        size='small'
+                        id='time'
+                        name='time'
+                        type='time'
+                        label='Hora'
+                        onChange={handleChange}
+                        value={formData.time}
+                    />
+                    <Button id='submit' type='submit' size='large'>
+                        Cargar
+                    </Button>
+                </Stack>
+            </form>
+        </Container>
     );
 }
 
