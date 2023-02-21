@@ -143,6 +143,7 @@ function FormCargarMovimiento() {
                         variant='outlined'
                         name='workHours'
                         id='workHours'
+                        type='number'
                         value={formData.workHours}
                         onChange={handleChange}
                     />

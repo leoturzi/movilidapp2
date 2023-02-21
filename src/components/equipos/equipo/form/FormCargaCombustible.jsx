@@ -107,6 +107,7 @@ function FormCargaCombustible() {
                         variant='outlined'
                         name='liters'
                         id='liters'
+                        type='number'
                         value={formData.liters}
                         onChange={handleChange}
                     />
